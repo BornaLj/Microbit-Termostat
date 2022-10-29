@@ -31,27 +31,9 @@ display.show(Image.SQUARE)    # debug/comment
 
 # loop repeats forever
 while True:
-    
-    # set hours by pressing button A
-    if button_a.is_pressed():
-        hour += 1
-        if hour > 23:
-            hour = 0
-        display.scroll(hour)
-        display.show(":")
-        sleep(100)   # debug/comment
-    
-    # set minutes by pressing button B
-    if button_b.is_pressed():
-        minute += 1
-        if minute > 59:
-            minute = 0
-        display.scroll(minute)
-        display.show(":")
-        sleep(100)   # debug/comment
 
     # switch into send/receive mode by shaking micro:bit
-    if accelerometer.was_gesture('shake'):
+    if button_a.is_pressed():
         while True:
             display.show(Image.CONFUSED)   # display CONFUSED if in send/receive
             sleep(1000)
@@ -109,3 +91,6 @@ while True:
                 display.clear()   # debug/comment
                 
                 data.append({"date": date, 'time': time, 'id' : id, 'temp': temp})
+            if button_b.is_pressed():
+                uart.write(data)
+                data = []
