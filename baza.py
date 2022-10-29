@@ -3,11 +3,21 @@ from microbit import *
 import radio
 #import log    # debug/comment
 
-# set local variables for time as hour, minute, seconds
-# change variables for case
-hour = 22
-minute = 29
-second = 50
+data = []
+
+#Recives local variables (hour, minute, second, date)
+while True:
+    try:
+        Time = uart.readline().split()
+        hour = int(Time[0])
+        minute = int(Time[1])
+        second = int(Time[2])
+        day = int(Time[3])
+        month = int(Time[4])
+        year = int(Time[5])
+        break
+    except:
+        continue
 
 # set radio group and turn radio on
 radio.config(group=1)
@@ -54,7 +64,27 @@ while True:
                 hour += 1
                 minute = 0
             if hour >= 24:
+                day += 1
                 hour = 0
+            
+            #Changing the month and the year
+            if month == 2:
+                if year%4 == 0 and day == 29:
+                    month += 1
+                    day = 1
+                elif day == 28:
+                    month += 1
+                    day = 1
+                elif month in [1, 3, 5, 7, 8, 10, 12] and day == 31:
+                    if month == 12:
+                        year += 1
+                        month = 1
+                        day = 1
+                    else:
+                        month += 1
+                elif mjesec in [2, 4, 6, 9, 11] and dan == 30:
+                    month += 1
+
             
             # send request to sub units
             print(str(hour),":",str(minute),":",str(second))   # debug/comment
@@ -69,6 +99,7 @@ while True:
             response = radio.receive()
             if response:
                 time = str(hour) + ":" + str(minute) + ":" + str(second)
+                date = (f"{day}.{month}.{year}")
                 id = str(response).split(":")[0]
                 temp = str(response).split(":")[1]
 
@@ -77,5 +108,4 @@ while True:
                 display.scroll(response)   # debug/comment
                 display.clear()   # debug/comment
                 
-                # log responses received
-                # log.add({'time': time, 'id' : id, 'temp': temp})
+                data.append({"date": date, 'time': time, 'id' : id, 'temp': temp})
