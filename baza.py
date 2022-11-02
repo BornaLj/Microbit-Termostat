@@ -80,17 +80,9 @@ while True:
             # when response is received
             response = radio.receive()
             if response:
-                time = str(hour) + ":" + str(minute) + ":" + str(second)
+                time = str(hour) + ":" + str(minute)
                 date = (f"{day}.{month}.{year}")
                 id = str(response).split(":")[0]
                 temp = str(response).split(":")[1]
-
-                # show sub unit's id to confirm received response
-                display.show(id)   # debug/comment
-                display.scroll(response)   # debug/comment
-                display.clear()   # debug/comment
                 
-                data.append({"date": date, 'time': time, 'id' : id, 'temp': temp})
-            if button_b.is_pressed():
-                uart.write(data)
-                data = []
+                data.append(id, date, time, temp)
