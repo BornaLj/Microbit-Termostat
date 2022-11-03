@@ -32,7 +32,7 @@ display.show(Image.SQUARE)    # debug/comment
 # loop repeats forever
 while True:
 
-    # switch into send/receive mode by shaking micro:bit
+    # switch into send/receive mode by pressing button A
     if button_a.is_pressed():
         while True:
             display.show(Image.CONFUSED)   # display CONFUSED if in send/receive
