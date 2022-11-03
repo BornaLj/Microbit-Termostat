@@ -3,7 +3,7 @@ from microbit import *
 import radio
 #import log    # debug/comment
 
-data = []
+data = ""
 
 #Recives local variables (hour, minute, second, date)
 while True:
@@ -35,6 +35,9 @@ while True:
     # switch into send/receive mode by pressing button A
     if button_a.is_pressed():
         while True:
+            if button_b.was_pressed():
+                data = data + "Gathered data"
+                uart.write(data)
             display.show(Image.CONFUSED)   # display CONFUSED if in send/receive
             sleep(1000)
             # increase seconds, minutes and hours
@@ -85,4 +88,4 @@ while True:
                 id = str(response).split(":")[0]
                 temp = str(response).split(":")[1]
                 
-                data.append(id, date, time, temp)
+                data = data + (f"{id},{date},{time},{temp}") + "|"
