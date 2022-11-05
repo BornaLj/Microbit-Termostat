@@ -35,9 +35,14 @@ while True:
     # switch into send/receive mode by pressing button A
     if button_a.is_pressed():
         while True:
+            
+            #Extracting the data
             if button_b.was_pressed():
                 data = data + "Gathered data"
                 uart.write(data)
+                sleep(2000)
+                reset() #resets microbit after data extraction (2 sec delay for saftey)
+   
             display.show(Image.CONFUSED)   # display CONFUSED if in send/receive
             sleep(1000)
             # increase seconds, minutes and hours
