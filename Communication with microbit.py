@@ -3,7 +3,7 @@ import datetime
 import time
 
 print("Priključite microbit prije nego što započnete")
-ulaz = input("Napišite START kako biste započeli")
+ulaz = input("Napišite START kako biste započeli: ")
 
 while True:
     if ulaz == "START":
