@@ -1,9 +1,14 @@
 from microbit import *
 import radio
 
-# !!! change unit id !!!
-id = 1   
-
+#User setts the microbit id
+id = 1
+while True:
+    if button_a.was_pressed():
+        id += 1
+    elif button_b.was_pressed():
+        break
+    
 radio.config(group=1)
 radio.on()
 
