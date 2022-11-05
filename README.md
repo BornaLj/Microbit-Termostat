@@ -1,5 +1,5 @@
 # Microbit-Termostat
-Buisness analyst: Mario Čičin-Šain \n
-Lead developer: Borna Ljubičić \n
-Developers: Viktor Vukšić, Josip Došen \n
-Tester: Lovro Kovačić \n
+Buisness analyst: Mario Čičin-Šain |
+Lead developer: Borna Ljubičić |
+Developers: Viktor Vukšić, Josip Došen |
+Tester: Lovro Kovačić |
