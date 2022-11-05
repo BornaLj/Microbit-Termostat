@@ -12,7 +12,7 @@ while True:
         ser = serial.Serial("COM3", 9600, timeout=.1)
         time.sleep(1)
         slanje = (f"{datetime.datetime.now().hour} {datetime.datetime.now().minute} {datetime.datetime.now().second} {datetime.datetime.now().day} {datetime.datetime.now().month} {datetime.datetime.now().year}")
-        ser.write(slanje)
+        ser.write(slanje.encode())
 
         #waiting for response from microbit
         while True:
