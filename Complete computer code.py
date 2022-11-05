@@ -16,7 +16,11 @@ while True:
                 ser = serial.Serial(p, 9600, timeout=.1)
                 break
             except:
-                continue
+                if ports.index(p) == len(ports)-1:
+                    print("Mikrobit nije prikopčan na aktivan port. Ponovo pokrenite program i pokušajte ponovo")
+                    quit()
+                else:
+                    continue
         
         #sending date and time
         time.sleep(1)
