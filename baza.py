@@ -16,9 +16,6 @@ while True:
     # switch into send/receive mode by pressing button A
     if button_a.is_pressed():
         while True:
-            if button_b.was_pressed():
-                data = data + "Gathered data"
-                uart.write(data)
             display.show(Image.CONFUSED)   # display CONFUSED if in send/receive
             sleep(1000)
             # increase seconds, minutes and hours
