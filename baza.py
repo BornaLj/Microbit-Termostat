@@ -67,7 +67,7 @@ while True:
                         day = 1
                     else:
                         month += 1
-                elif mjesec in [2, 4, 6, 9, 11] and dan == 30:
+                elif month in [2, 4, 6, 9, 11] and day == 30:
                     month += 1
 
             
