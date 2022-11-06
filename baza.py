@@ -84,7 +84,7 @@ while True:
             
         # send request to sub units
         print(str(hour),":",str(minute),":",str(second))   # debug/comment
-        if second%20 == 0:   # production
+        if second == 0 and minute%30 == 0:   # production
         #if second % 11 == 0:   # dev/test
             radio.send("+")
             time = str(hour) + ":" + str(minute)
