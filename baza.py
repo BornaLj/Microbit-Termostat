@@ -94,7 +94,7 @@ while True:
                 id = str(response).split(":")[0]
                 temp = str(response).split(":")[1]
                 if int(temp) >= limit:
-                    message = (f"{id},{date},{time},{temp}|Temperature warning")
+                    message = (f"{id},{date},{time},{temp}|Warning")
                     uart.write(message)
                 
                 data = data + (f"{id},{date},{time},{temp}") + "|"
