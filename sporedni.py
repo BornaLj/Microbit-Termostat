@@ -8,7 +8,7 @@ while True:
         id += 1
     elif button_b.was_pressed():
         break
-    elif accelerometer.was_gesture('shake'):
+    elif button_a.is_pressed() and button_b.is_pressed():
         id = 1
     
 radio.config(group=1)
