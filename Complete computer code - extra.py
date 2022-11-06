@@ -27,7 +27,7 @@ while True:
         #determining open serial port
         for p in comports():
             try:
-                ser = serial.Serial(p.name, 9600, timeout=.1)
+                ser = serial.Serial(p.name, 9600, timeout=3)
                 break
             except:
                 if comports().index(p) == len(comports())-1:
@@ -36,18 +36,19 @@ while True:
                 continue
         
         #sending date and time
-        time.sleep(1)
+        time.sleep(2)
         slanje = (f"{datetime.datetime.now().hour} {datetime.datetime.now().minute} {datetime.datetime.now().second} {datetime.datetime.now().day} {datetime.datetime.now().month} {datetime.datetime.now().year} {limit}")
         ser.write(slanje.encode())
 
         #waiting for response from microbit
         while True:
-            data = ser.readline().decode("utf-8")
+            data = ser.readline()
+            encoding = "utf-8"
+            data = str(data, encoding, errors="ignore")
             if data:
-                
                 #Transforming string data into list
                 data = data.split("|")
-
+                
                 #writing out gathered data from microbit
                 if data[-1] == "Gathered data":
                     data.pop(-1)
@@ -109,6 +110,7 @@ while True:
 
                     #storing the value as "data" in order to avoid confusion
                     data = newData2.copy()
+                    print(data)
 
                 #For sending warnings
                 elif data[-1] == "Warning":
@@ -116,7 +118,7 @@ while True:
                         data = ""
                         continue
                     else:
-                        data = data[0].split(",")
+                        data[0] = data[0].split(",")
                         poruka = (f"High temperature warning - id:{data[0][0]}, date:{data[0][1]}, time:{data[0][2]}, temp:{data[0][3]}")
 
                         #Setting the message
@@ -137,3 +139,4 @@ while True:
         #prevention from typing wrong commands
         while ulaz != "START":
             ulaz = input("Pogreška u unosu, napišite START kako biste započeli")
+
