@@ -46,17 +46,19 @@ while True:
                 
                 #Transforming string data into list
                 data = data.split("|")
-                data2 = []
-                for element in data:
-                    element = element.split(",")
-                    data2.append(element)
-                
-                data = data2.copy()
 
                 #writing out gathered data from microbit
                 if data[-1] == "Gathered data":
                     data.pop(-1)
-
+                    
+                    #Further data transformation
+                    data2 = []
+                    for element in data:
+                        element = element.split(",")
+                        data2.append(element)
+                
+                    data = data2.copy()
+                
                     #preparing data in a specific form | data = {id:{date:{time:temp}}}
                     newData = {}
                     newData2 = {}
