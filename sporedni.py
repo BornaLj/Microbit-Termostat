@@ -8,6 +8,8 @@ while True:
         id += 1
     elif button_b.was_pressed():
         break
+    elif accelerometer.was_gesture('shake'):
+        id = 1
     
 radio.config(group=1)
 radio.on()
