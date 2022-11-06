@@ -8,7 +8,7 @@ data = ""
 #Recives local variables (hour, minute, second, date)
 while True:
     try:
-        Time = uart.readline().split()
+        Time = uart.readline().decode("utf-8").split()
         hour = int(Time[0])
         minute = int(Time[1])
         second = int(Time[2])
@@ -82,6 +82,15 @@ while True:
             if second == 0 and minute % 30 == 0:   # production
             #if second % 11 == 0:   # dev/test
                 radio.send("+")
+                time = str(hour) + ":" + str(minute)
+                date = str(day)+"."+str(month)+"."+str(year)+"."
+                id = "1"
+                temp = temperature()
+                if int(temp) >= limit:
+                    message = str(id) + "," + str(date) + "," + str(time) + "," + str(temp) + "|" + "Warning"
+                    uart.write(message)
+                data = data + str(id) + "," + str(date) + "," + str(time) + "," + str(temp) + "|"
+                
                 display.show("+")   # debug/comment
                 sleep(100)   # debug/comment
                 # print("request sent")   # debug/comment
@@ -90,11 +99,11 @@ while True:
             response = radio.receive()
             if response:
                 time = str(hour) + ":" + str(minute)
-                date = (f"{day}.{month}.{year}")
+                date = str(day)+"."+str(month)+"."+str(year)+"."
                 id = str(response).split(":")[0]
                 temp = str(response).split(":")[1]
                 if int(temp) >= limit:
-                    message = (f"{id},{date},{time},{temp}|Warning")
+                    message = str(id) + "," + str(date) + "," + str(time) + "," + str(temp) + "|" + "Warning"
                     uart.write(message)
-                
-                data = data + (f"{id},{date},{time},{temp}") + "|"
+                    
+                data = data + str(id) + "," + str(date) + "," + str(time) + "," + str(temp) + "|"
