@@ -32,6 +32,7 @@ while True:
             except:
                 if comports().index(p) == len(comports())-1:
                     print("Mikrobit nije spojen ni na jedan aktivan port. Ponovo pokrenite program i pokušajte ponovo.")
+                    quit()
                 continue
         
         #sending date and time
