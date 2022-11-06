@@ -115,6 +115,7 @@ while True:
                         data = ""
                         continue
                     else:
+                        data = data[0].split(",")
                         poruka = (f"High temperature warning - id:{data[0][0]}, date:{data[0][1]}, time:{data[0][2]}, temp:{data[0][3]}")
 
                         #Setting the message
