@@ -5,13 +5,16 @@ import radio
 
 data = ""
 uart.init(9600)
+encoding = "utf-8"
 
-display.show(Image.CLOCK1)
+display.show(Image.DIAMOND)
 
-#Recives local variables (hour, minute, second, date)
 while True:
-    try:
-        Time = uart.readline().decode("utf-8").split()
+    ulaz = uart.readline()
+    if ulaz == None:
+        continue
+    else:
+        Time = str(ulaz, encoding).split()
         hour = int(Time[0])
         minute = int(Time[1])
         second = int(Time[2])
@@ -21,8 +24,6 @@ while True:
         limit = int(Time[6])
         display.clear()
         break
-    except:
-        continue
 
 # set radio group and turn radio on
 radio.config(group=1)
@@ -82,7 +83,7 @@ while True:
             
         # send request to sub units
         print(str(hour),":",str(minute),":",str(second))   # debug/comment
-        if second == 0 and minute % 1 == 0:   # production
+        if second == 0 and minute % 30 == 0:   # production
         #if second % 11 == 0:   # dev/test
             radio.send("+")
             time = str(hour) + ":" + str(minute)
