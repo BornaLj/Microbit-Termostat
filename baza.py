@@ -15,6 +15,7 @@ while True:
         day = int(Time[3])
         month = int(Time[4])
         year = int(Time[5])
+        limit = int(Time[6])
         break
     except:
         continue
@@ -92,5 +93,8 @@ while True:
                 date = (f"{day}.{month}.{year}")
                 id = str(response).split(":")[0]
                 temp = str(response).split(":")[1]
+                if int(temp) >= limit:
+                    message = (f"{id},{date},{time},{temp}|Temperature warning")
+                    uart.write(message)
                 
                 data = data + (f"{id},{date},{time},{temp}") + "|"
