@@ -10,20 +10,21 @@ encoding = "utf-8"
 display.show(Image.DIAMOND)
 
 while True:
-    ulaz = uart.readline()
+    ulaz = uart.read()
     if ulaz == None:
         continue
     else:
-        Time = str(ulaz, encoding).split()
-        hour = int(Time[0])
-        minute = int(Time[1])
-        second = int(Time[2])
-        day = int(Time[3])
-        month = int(Time[4])
-        year = int(Time[5])
-        limit = int(Time[6])
-        display.clear()
+        Time = str(ulaz, encoding).split(" ")
         break
+
+hour = int(Time[0])
+minute = int(Time[1])
+second = int(Time[2])
+day = int(Time[3])
+month = int(Time[4])
+year = int(Time[5])
+limit = int(Time[6])
+display.clear()
 
 # set radio group and turn radio on
 radio.config(group=1)
@@ -83,7 +84,7 @@ while True:
             
         # send request to sub units
         print(str(hour),":",str(minute),":",str(second))   # debug/comment
-        if second == 0 and minute % 30 == 0:   # production
+        if second%20 == 0:   # production
         #if second % 11 == 0:   # dev/test
             radio.send("+")
             time = str(hour) + ":" + str(minute)
