@@ -14,7 +14,7 @@ radio.on()
 
 while True:
     message = radio.receive()
-    display.show(id)   # debug/comment
+    display.scroll(str(id))   # debug/comment
     if message == "+":
         display.show(message)   # debug/comment
         sleep(id*100)   # do not remove this line
