@@ -158,14 +158,14 @@ while True:
                         vrijeme = vremena[i]
                         temp = temperature[br:m:n]
                         temp = [eval(i) for i in temp]
-                        if brp % 2 != 0:
+                        if brp % n != 0:
                             br += 1 
-                        if brp % 2 == 0:
+                        if brp % n == 0:
                             br = m
                             m = m + p
                         brp += 1
                         temp.insert(0, vrijeme)
-                        print(temp)
+                        
                         lista.append(temp)
                     
 
