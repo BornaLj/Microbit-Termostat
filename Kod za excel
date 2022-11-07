@@ -2,9 +2,9 @@ from openpyxl import Workbook, load_workbook
 from openpyxl.utils import get_column_letter
 from openpyxl.styles import Font
 import json
-    
-data = {"1":{"2.11.2022.":{"14:30":"19", "15:00":"20"}, "3.11.2022.":{"14:30":"11", "15:00":"21"}}, "2":{"2.11.2022.":{"14:30":"19", "15:00":"22"}, "3.11.2022.":{"14:30":"11", "15:00":"12"}}}
-data = {"1":{"2.11.2022.":{"14:30":"4", "15:00":"5"}, "3.11.2022.":{"14:30":"6", "15:00":"7"}}, "2":{"2.11.2022.":{"14:30":"14", "15:00":"15"}, "3.11.2022.":{"14:30":"16", "15:00":"17"}}, "3":{"2.11.2022.":{"14:30":"24", "15:00":"25"}, "3.11.2022.":{"14:30":"26", "15:00":"27"}}}
+
+data = {"1":{"2.11.2022.":{"14:30":"4"}, "3.11.2022.":{"14:30":"6"}}, "2":{"2.11.2022.":{"14:30":"14"}, "3.11.2022.":{"14:30":"16"}}, "3":{"2.11.2022.":{"14:30":"24"}, "3.11.2022.":{"14:30":"26"}}}    
+data = {"1":{"2.11.2022.":{"14:30":"1", "15:00":"2", "15:30":"3"}, "3.11.2022.":{"14:30":"4", "15:00":"5", "15:30":"6"}}, "2":{"2.11.2022.":{"14:30":"7", "15:00":"8", "15:30":"9"}, "3.11.2022.":{"14:30":"10", "15:00":"11", "15:30":"12"}}, "3":{"2.11.2022.":{"14:30":"13", "15:00":"14", "15:30":"15"}, "3.11.2022.":{"14:30":"16", "15:00":"17", "15:30":"18"}}}
 
 wb = Workbook()
 ws = wb.active
@@ -20,7 +20,8 @@ for microbit, dan in data.items():
         for vrijeme, temperatura in data[microbit][dan].items():
             temperature.append(temperatura)
             vremena.append(vrijeme)
-            M = int(microbit)
+            
+M = int(microbit)
 
 def my_function(x):
   return list(dict.fromkeys(x))
@@ -34,20 +35,19 @@ p = m
 lista = []
 
 for microbit in data:
-    for i in range(0, len(vremena)):
+    for i in range(0, n):
         vrijeme = vremena[i]
-        for j in range(0, len(vremena)-1):
-            temp = temperature[br:m:n]
-            temp = [eval(i) for i in temp]
-            if brp % 2 != 0:
-                br += 1 
-            if brp % 2 == 0:
-                br = m
-                m = m + p
-            brp += 1
-            temp.insert(0, vrijeme)
-            print(temp)
-            lista.append(temp)
+        temp = temperature[br:m:n]
+        temp = [eval(i) for i in temp]
+        if brp % n != 0:
+            br += 1
+        if brp % n == 0:
+            br = m
+            m = m + p
+        brp += 1
+        temp.insert(0, vrijeme)
+        print(temp)
+        lista.append(temp)
 
 l = 0
             
@@ -64,6 +64,8 @@ for microbit in data:
     for i in range(0, n):
         ws.append(lista[l])
         l += 1
+        br_ap += 1
+        
     ws.append([''])
     ws.append([''])
     br_ap += 4
