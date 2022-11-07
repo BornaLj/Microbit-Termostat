@@ -52,6 +52,7 @@ while True:
             data = ser.readline()
             encoding = "utf-8"
             data = str(data, encoding, errors="ignore")
+            print(data)
             if data:
                 #Transforming string data into list
                 data = data.split("|")
@@ -192,29 +193,29 @@ while True:
 
                     wb.save("NovTemp.xlsx")
 
-
                 #For sending warnings
-                elif data[-1] == "Warning":
-                    if izbor == "NE":
-                        data = ""
-                        continue
-                    else:
-                        data[0] = data[0].split(",")
-                        poruka = (f"High temperature warning - id:{data[0][0]}, date:{data[0][1]}, time:{data[0][2]}, temp:{data[0][3]}")
+                elif len(data) == 3:
+                    if data[-2] == "Warning":
+                        if izbor == "NE":
+                            data = ""
+                            continue
+                        else:
+                            data[0] = data[0].split(",")
+                            poruka = (f"High temperature warning - id:{data[0][0]}, date:{data[0][1]}, time:{data[0][2]}, temp:{data[0][3]}")
 
-                        #Setting the message
-                        msg = EmailMessage()
-                        msg["From"] = "microbit.termostat@outlook.com"
-                        msg["To"] = mail
-                        msg["Subject"] = "Temperature warning"
-                        msg.set_content(poruka)
+                            #Setting the message
+                            msg = EmailMessage()
+                            msg["From"] = "microbit.termostat@outlook.com"
+                            msg["To"] = mail
+                            msg["Subject"] = "Temperature warning"
+                            msg.set_content(poruka)
 
-                        #Sending the message
-                        s = smtplib.SMTP("smtp-mail.outlook.com", port=587)
-                        s.starttls()
-                        s.login("microbit.termostat@outlook.com", "Microbit314")
-                        s.sendmail("microbit.termostat@outlook.com" , mail, msg.as_string())
-                        s.quit()
+                            #Sending the message
+                            s = smtplib.SMTP("smtp-mail.outlook.com", port=587)
+                            s.starttls()
+                            s.login("microbit.termostat@outlook.com", "Microbit314")
+                            s.sendmail("microbit.termostat@outlook.com" , mail, msg.as_string())
+                            s.quit()
                             
     else:
         #prevention from typing wrong commands
