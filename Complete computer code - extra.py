@@ -118,32 +118,28 @@ while True:
 
                     #storing the value as "data" in order to avoid confusion
                     data = newData2.copy()
-
+                    
                     #Transfering the data into excel
                     wb = Workbook()
                     ws = wb.active
                     ws.title = "Temperature"
-                    
 
                     br_ap = 1
-                    
 
                     temperature = []
                     vremena = []
-                    
 
                     for microbit, dan in data.items():
                         for dan, vrijeme in data[microbit].items():
                             for vrijeme, temperatura in data[microbit][dan].items():
                                 temperature.append(temperatura)
                                 vremena.append(vrijeme)
+
                     M = int(microbit)
-                    
 
                     def my_function(x):
                       return list(dict.fromkeys(x))
                     vremena = my_function(vremena)
-                    
 
                     n = len(vremena)
                     br = 0
@@ -151,7 +147,6 @@ while True:
                     m = (len(temperature)//M)
                     p = m
                     lista = []
-                    
 
                     for microbit in data:
                         for i in range(0, n):
@@ -159,37 +154,36 @@ while True:
                             temp = temperature[br:m:n]
                             temp = [eval(i) for i in temp]
                             if brp % n != 0:
-                                br += 1 
+                                br += 1
                             if brp % n == 0:
                                 br = m
                                 m = m + p
                             brp += 1
                             temp.insert(0, vrijeme)
+                            print(temp)
                             lista.append(temp)
-                    
 
                     l = 0
-                                
+
                     for microbit in data:
                         mic = ['MICROBIT_' + microbit]
                         ws.append([''] + mic)
-                        
+
                         datumi = [''] + list(data[microbit].keys())
                         ws.append(datumi)
-                        
+
                         br_ap2 = br_ap + 1
                         ws.merge_cells(f"{'A' + str(br_ap)}:{'A' + str(br_ap2)}")
-                    
 
                         for i in range(0, n):
                             ws.append(lista[l])
                             l += 1
                             br_ap += 1
-                            
+
                         ws.append([''])
                         ws.append([''])
                         br_ap += 4
-                    
+
 
                     wb.save("NovTemp.xlsx")
 
