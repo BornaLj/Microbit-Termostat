@@ -30,11 +30,7 @@ display.clear()
 radio.config(group=1)
 radio.on()
 
-# show SQUARE if micro:bit is ready
-display.show(Image.SQUARE)    # debug/comment
 
-# test data logging
-# log.set_labels('time', 'id', 'temp')    # debug/comment
 
 # loop repeats forever
 while True:
@@ -92,7 +88,7 @@ while True:
             id = "1"
             temp = temperature()
             if int(temp) >= limit:
-                message = str(id) + "," + str(date) + "," + str(time) + "," + str(temp) + "|" + "Warning"
+                message = str(id) + "," + str(date) + "," + str(time) + "," + str(temp) + "|" + "Warning|"
                 uart.write(message)
             data = data + str(id) + "," + str(date) + "," + str(time) + "," + str(temp) + "|"
                 
@@ -108,7 +104,7 @@ while True:
             id = str(response).split(":")[0]
             temp = str(response).split(":")[1]
             if int(temp) >= limit:
-                message = str(id) + "," + str(date) + "," + str(time) + "," + str(temp) + "|" + "Warning"
+                message = str(id) + "," + str(date) + "," + str(time) + "," + str(temp) + "|" + "Warning|"
                 uart.write(message)
                     
             data = data + str(id) + "," + str(date) + "," + str(time) + "," + str(temp) + "|"
