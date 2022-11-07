@@ -137,7 +137,7 @@ while True:
                             for vrijeme, temperatura in data[microbit][dan].items():
                                 temperature.append(temperatura)
                                 vremena.append(vrijeme)
-                                M = int(microbit)
+                    M = int(microbit)
                     
 
                     def my_function(x):
@@ -155,18 +155,17 @@ while True:
 
                     for microbit in data:
                         for i in range(0, n):
-                        vrijeme = vremena[i]
-                        temp = temperature[br:m:n]
-                        temp = [eval(i) for i in temp]
-                        if brp % n != 0:
-                            br += 1 
-                        if brp % n == 0:
-                            br = m
-                            m = m + p
-                        brp += 1
-                        temp.insert(0, vrijeme)
-                        
-                        lista.append(temp)
+                            vrijeme = vremena[i]
+                            temp = temperature[br:m:n]
+                            temp = [eval(i) for i in temp]
+                            if brp % n != 0:
+                                br += 1 
+                            if brp % n == 0:
+                                br = m
+                                m = m + p
+                            brp += 1
+                            temp.insert(0, vrijeme)
+                            lista.append(temp)
                     
 
                     l = 0
