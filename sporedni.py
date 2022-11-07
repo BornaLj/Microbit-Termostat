@@ -2,14 +2,12 @@ from microbit import *
 import radio
 
 #User setts the microbit id
-id = 1
+id = 2
 while True:
     if button_a.was_pressed():
         id += 1
     elif button_b.was_pressed():
         break
-    elif button_a.is_pressed() and button_b.is_pressed():
-        id = 1
     
 radio.config(group=1)
 radio.on()
