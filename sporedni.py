@@ -1,7 +1,7 @@
 from microbit import *
 import radio
 
-#User setts the microbit id
+#Korisnik namjesta id microbita
 id = 2
 while True:
     if button_a.was_pressed():
@@ -14,10 +14,10 @@ radio.on()
 
 while True:
     message = radio.receive()
-    display.scroll(str(id))   # debug/comment
+    display.scroll(str(id))   # Provjerava radi li kod
     if message == "+":
-        display.show(message)   # debug/comment
-        sleep(id*100)   # do not remove this line
+        display.show(message)   # Provjerava radi li kod
+        sleep(id*100)   # Obavezno treba ostati (microbitu treba vremen)
         response = (str(id) + ":" + str(temperature()))
         radio.send(response)
         display.scroll(str(temperature()))   # debug/comment
