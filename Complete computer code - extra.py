@@ -115,6 +115,7 @@ while True:
                                     rječnik.update(zapis)
                                     continue
                         newData2.update({a:rječnik})
+                        print(data)
 
                     #storing the value as "data" in order to avoid confusion
                     data = newData2.copy()
@@ -186,6 +187,7 @@ while True:
 
 
                     wb.save("NovTemp.xlsx")
+                    quit()
 
                 #For sending warnings
                 elif len(data) == 3:
