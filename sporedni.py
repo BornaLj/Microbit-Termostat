@@ -2,7 +2,7 @@ from microbit import *
 import radio
 
 #User setts the microbit id
-id = 1
+id = 2
 while True:
     if button_a.was_pressed():
         id += 1
