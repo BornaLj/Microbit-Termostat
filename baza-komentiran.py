@@ -1,32 +1,34 @@
-# Potrebni modueli
+# Potrebni moduli za rad s microbitom i microbit radijem
 from microbit import *
 import radio
 
+#Priprema za komunikaciju između baze i računala
 data = ""
-uart.init(9600)
+uart.init(9600) #Frekvencija prenošenja bitova u određenom vremenu
 encoding = "utf-8"
 
 #Provjera radi li kod
 display.show(Image.DIAMOND)
 
+#Provjera primanja poruke od računala
 while True:
     ulaz = uart.read()
     if ulaz == None:
         continue
     else:
-        Time = str(ulaz, encoding).split(" ")
+        Time = str(ulaz, encoding).split(" ") #Prima stvarno vrijeme
         break
-
+#Raspoređuje poruku na različite varijable
 hour = int(Time[0])
 minute = int(Time[1])
 second = int(Time[2])
 day = int(Time[3])
 month = int(Time[4])
 year = int(Time[5])
-limit = int(Time[6])
+limit = int(Time[6]) #Temperatura koju je korisnik odabrao na početku
 display.clear()
 
-# Ukljucivanje funkcije radija i namjestanje na radio liniju 1
+# Uključivanje funkcije radija i namještanje na radio liniju 1
 radio.config(group=1)
 radio.on()
 
@@ -35,19 +37,19 @@ radio.on()
 # Zauvijek se ponavlja
 while True:
 
-    display.show(Image.HAPPY)
+    display.show(Image.HAPPY) #Provjerava radi li kod
     while True:
             
-        #Vadjenje podataka
+        #Vađenje podataka
         if button_b.was_pressed():
             data = data + "Gathered data"
             uart.write(data)
             sleep(2000)
-            reset() #resets microbit after data extraction (2 sec delay for saftey)
+            reset() #Resetira microbit nakon vađenja podataka (2 sekunde duljina iz sigurnosnih razloga)
    
-        display.show(Image.CONFUSED)   # display CONFUSED if in send/receive
+        display.show(Image.CONFUSED)   # Provjerava radi li kod
         sleep(1000)
-        # Povecavanje varijabli za vrijeme (sluzi za mjerenje vremena)
+        # Povećavanje varijabli za vrijeme (služi za mjerenje vremena)
         second += 1
         if second >= 60:
             minute += 1
@@ -95,7 +97,7 @@ while True:
             sleep(100)   
          
             
-        # Kada je dobiven odgovor (response)
+        # Kada je dobiven odgovor (response) složi novi string
         response = radio.receive()
         if response:
             time = str(hour) + ":" + str(minute)
