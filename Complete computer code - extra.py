@@ -123,34 +123,40 @@ while True:
                     data = newData2.copy()
                     
                     #Prijenos podataka u excel
-                    wb = Workbook()
+                    
+                    # Priprema za stvaranje Excel tablice, sprema podatke i stvara Excel tablicu
+                    wb = Workbook() 
                     ws = wb.active
                     ws.title = "Temperature"
 
-                    br_ap = 1
+                    br_ap = 1 #Broj zauzetih redova
 
                     temperature = []
                     vremena = []
-
+                   
+                     #Razbija bivši rječnik i djeli određena podatke u svoje posebne liste
                     for microbit, dan in data.items():
                         for dan, vrijeme in data[microbit].items():
                             for vrijeme, temperatura in data[microbit][dan].items():
                                 temperature.append(temperatura)
                                 vremena.append(vrijeme)
 
-                    M = int(microbit)
+                    M = int(microbit) #Broj sveukupnih microbita
 
+                    #Uklanja duple zapise vremena (Sa svakim poslanim podatkom uvijek se ponovno ispišu vremena. Ova funkcija služi kako bi se rješila tog ponavljanja)
                     def my_function(x):
                       return list(dict.fromkeys(x))
                     vremena = my_function(vremena)
-
-                    n = len(vremena)
-                    br = 0
+                    
+                    
+                    n = len(vremena) #Finalni broj vremena.
+                    br = 0 
                     brp = 1
                     m = (len(temperature)//M)
                     p = m
                     lista = []
-
+                    
+                    #Iz liste temperature izvlače se pojedinačne temperature koje se kasnije kronološkim redoslijedom zapisuju u Excel
                     for microbit in data:
                         for i in range(0, n):
                             vrijeme = vremena[i]
@@ -166,8 +172,9 @@ while True:
                             print(temp)
                             lista.append(temp)
 
-                    l = 0
-
+                    l = 0 #Index na kojem će se temperature izvlačiti iz liste "Lista"
+                    
+                    #Zapisuje potrebne podatke u Excel (id, datume, vremena i temperature)
                     for microbit in data:
                         mic = ['MICROBIT_' + microbit]
                         ws.append([''] + mic)
@@ -188,7 +195,7 @@ while True:
                         br_ap += 4
 
 
-                    wb.save("NovTemp.xlsx")
+                    wb.save("NovTemp.xlsx") #Sprema dokument
 
                 #U slucaju greske salje upozorenje
                 elif len(data) == 3:
