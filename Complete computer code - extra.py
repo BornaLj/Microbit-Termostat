@@ -1,16 +1,16 @@
-#Module za serial communication + datum i vrijeme
+#Module za serial communication (komunikacije između računala i microbita) + datum i vrijeme
 import serial
 import datetime
 import time
 from serial.tools.list_ports import comports
 
-#Za excel
+#Module za Excel
 from openpyxl import Workbook, load_workbook
 from openpyxl.utils import get_column_letter
 from openpyxl.styles import Font
 import json
 
-#Potrebno za slanje mailova
+#Ovo je potrebno za slanje mailova
 import smtplib
 from email.message import EmailMessage
 
