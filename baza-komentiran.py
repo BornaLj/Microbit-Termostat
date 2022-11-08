@@ -88,7 +88,7 @@ while True:
             date = str(day)+"."+str(month)+"."+str(year)+"."
             id = "1"
             temp = temperature()
-            if int(temp) >= limit:
+            if int(temp) >= limit: #Gleda je li temperatura prešla odabranu temperaturu
                 message = str(id) + "," + str(date) + "," + str(time) + "," + str(temp) + "|" + "Warning|"
                 uart.write(message)
             data = data + str(id) + "," + str(date) + "," + str(time) + "," + str(temp) + "|"
@@ -104,7 +104,7 @@ while True:
             date = str(day)+"."+str(month)+"."+str(year)+"."
             id = str(response).split(":")[0]
             temp = str(response).split(":")[1]
-            if int(temp) >= limit:
+            if int(temp) >= limit: #Gleda je li temperatura prešla odabranu temperaturu
                 message = str(id) + "," + str(date) + "," + str(time) + "," + str(temp) + "|" + "Warning|"
                 uart.write(message)
                     
