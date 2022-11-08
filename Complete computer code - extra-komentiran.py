@@ -1,10 +1,10 @@
-#Module za serial communication (komunikacije između računala i microbita) + datum i vrijeme
+#Moduli za serial communication (komunikacije između računala i microbita) + datum i vrijeme
 import serial
 import datetime
 import time
 from serial.tools.list_ports import comports
 
-#Module za Excel
+#Moduli za Excel
 from openpyxl import Workbook, load_workbook
 from openpyxl.utils import get_column_letter
 from openpyxl.styles import Font
@@ -14,8 +14,8 @@ import json
 import smtplib
 from email.message import EmailMessage
 
-print("Priključite microbit prije nego što započnete")
-izbor = input("Želite li primati obavjesti o povišenim temperaturama? DA ili NE: ")
+print("Priključite microbit prije nego što započnete") #Traži da se microbit baza spoji na računalo
+izbor = input("Želite li primati obavjesti o povišenim temperaturama? DA ili NE: ") 
 
 #Odluka korisnika vezano uz primanje notifikacija
 while izbor != "DA" and izbor != "NE":
@@ -28,7 +28,7 @@ else:
     limit = "100"
     
 
-#Pocetak programa
+#Početak programa
 ulaz = input("Napišite START kako biste započeli: ")
 
 while True:
@@ -45,12 +45,12 @@ while True:
                     quit()
                 continue
         
-        #Racunalo salje bazi vrijeme i datum
+        #Računalo šalje bazi vrijeme i datum
         time.sleep(2)
         slanje = (f"{datetime.datetime.now().hour} {datetime.datetime.now().minute} {datetime.datetime.now().second} {datetime.datetime.now().day} {datetime.datetime.now().month} {datetime.datetime.now().year} {limit}")
         ser.write(slanje.encode())
 
-        #Ceka se odgovor microbita (baze)
+        #Čeka se odgovor microbita (baze)
         while True:
             data = ser.readline()
             encoding = "utf-8"
@@ -60,7 +60,7 @@ while True:
                 #Dobiveni string se prebacuje u listu
                 data = data.split("|")
                 
-                #Gatherd data se uklanja iz liste
+                #"Gatherd data" string se uklanja iz liste, prepoznaje se jesu li to završni podatci
                 if data[-1] == "Gathered data":
                     data.pop(-1)
                     
@@ -72,7 +72,7 @@ while True:
                 
                     data = data2.copy()
                 
-                    #Organising the data in a dictionary: {id:{date:{time:temp}}}
+                    #Stvaranje rječnika ovog oblika: {id:{date:{time:temp}}}
                     newData = {}
                     newData2 = {}
                     newData3 = {}
@@ -80,7 +80,7 @@ while True:
                     rječnik = {}
                     rješeno = False
 
-                    #Determining the max number of microbits
+                    #Određivanje maksimalnog broja aktivnih microbita
                     for x in range(len(data)):
                         lista.append(int(data[x][0]))
 
@@ -88,7 +88,7 @@ while True:
 
                     lista = []
 
-                    #Grouping information by microbit id
+                    #Izlučivanje "id" microbita i povezivanje podatak po "id" microbita
                     for i in range(1, n+1):
                         lista = []
                         for j in data:
@@ -96,7 +96,7 @@ while True:
                                 lista.append(j[1:])
                         newData.update({str(i):lista})
 
-                    #Getting the final form
+                    #Dobivanje završnog oblika rječnika
                     for broj, ostalo in newData.items():
                         datumi = set()
                         vrijemeTemp = {}
@@ -113,6 +113,7 @@ while True:
 
                     data = newData3.copy()
                     print(data)
+                    
                     #Prijenos podataka u excel
                     
                     # Priprema za stvaranje Excel tablice, sprema podatke i stvara Excel tablicu
@@ -125,7 +126,7 @@ while True:
                     temperature = []
                     vremena = []
                    
-                     #Razbija bivši rječnik i djeli određena podatke u svoje posebne liste
+                     #Razbija bivši rječnik i djeli određene podatke u svoje posebne liste
                     for microbit, dan in data.items():
                         for dan, vrijeme in data[microbit].items():
                             for vrijeme, temperatura in data[microbit][dan].items():
@@ -134,7 +135,7 @@ while True:
 
                     M = int(microbit) #Broj sveukupnih microbita
 
-                    #Uklanja duple zapise vremena (Sa svakim poslanim podatkom uvijek se ponovno ispišu vremena. Ova funkcija služi kako bi se rješila tog ponavljanja)
+                    #Uklanja duple zapise vremena (bolje objašnjeno pod "funkcije-komentirane.py")
                     def my_function(x):
                       return list(dict.fromkeys(x))
                     vremena = my_function(vremena)
@@ -147,7 +148,7 @@ while True:
                     p = m
                     lista = []
                     
-                    #Iz liste temperature izvlače se pojedinačne temperature koje se kasnije kronološkim redoslijedom zapisuju u Excel
+                    #Iz liste "temperature" izvlače se pojedinačne temperature koje se kasnije kronološkim redoslijedom zapisuju u Excel
                     for microbit in data:
                         for i in range(0, n):
                             vrijeme = vremena[i]
@@ -188,7 +189,7 @@ while True:
 
                     wb.save("NovTemp.xlsx") #Sprema dokument
 
-                #U slucaju greske salje upozorenje
+                #U slučaju prelaska temperature šalje upozorenje
                 elif len(data) == 3:
                     if data[-2] == "Warning":
                         if izbor == "NE":
@@ -213,6 +214,6 @@ while True:
                             s.quit()
                             
     else:
-        #Prevencija u slucaju da korisnik ne upise pravilno potrebnu rijec ("START")
+        #Prevencija u slučaju da korisnik ne upiše pravilno potrebnu rijec ("START")
         while ulaz != "START":
             ulaz = input("Pogreška u unosu, napišite START kako biste započeli")
