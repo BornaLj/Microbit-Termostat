@@ -72,20 +72,23 @@ while True:
                 
                     data = data2.copy()
                 
-                    #priprema za postavljanje podataka na potreban nacin | data = {id:{date:{time:temp}}}
+                    #Organising the data in a dictionary: {id:{date:{time:temp}}}
                     newData = {}
                     newData2 = {}
+                    newData3 = {}
                     lista = []
                     rječnik = {}
                     rješeno = False
-                    
-                    #Racunanje maksimalnog broja aktivnih mikrobita 
+
+                    #Determining the max number of microbits
                     for x in range(len(data)):
                         lista.append(int(data[x][0]))
 
                     n = max(lista)
 
-                    #Grupiranje pod lista po id microbita
+                    lista = []
+
+                    #Grouping information by microbit id
                     for i in range(1, n+1):
                         lista = []
                         for j in data:
@@ -93,35 +96,23 @@ while True:
                                 lista.append(j[1:])
                         newData.update({str(i):lista})
 
-                    #Stvaranje finalnog rjecnika
-                    for a,b in newData.items():
-                        rječnik = {}
-                        zapis = {}
-                        for c in range(len(b)):
-                            if rješeno == True:
-                                rješeno = False
-                                continue
-                            else:
-                                try:
-                                    if b[c][0] == b[c+1][0]:
-                                        datum = b[c][0]
-                                        rješeno = True
-                                        zapis = {datum:{b[c][1]:b[c][2], b[c+1][1]:b[c+1][2]}}
-                                        rječnik.update(zapis)
-                                    else:
-                                        datum = b[c][0]
-                                        zapis = {datum:{b[c][1]:b[c][2]}}
-                                        rječnik.update(zapis)
-                                except:
-                                    datum = b[c][0]
-                                    zapis = {datum:{b[c][1]:b[c][2]}}
-                                    rječnik.update(zapis)
-                                    continue
-                        newData2.update({a:rječnik})
+                    #Getting the final form
+                    for broj, ostalo in newData.items():
+                        datumi = set()
+                        vrijemeTemp = {}
+                        newData2 = {}
+                        for član in ostalo:
+                            datumi.add(član[0])
 
-                    #Ponovno se sprema kao "data" kako ne bi doslo do zabuna
-                    data = newData2.copy()
-                    
+                        for datum in datumi:
+                            for x in ostalo:
+                                if x[0] == datum:
+                                    vrijemeTemp.update({x[1]:x[2]})
+                            newData2.update({datum:vrijemeTemp})
+                        newData3.update({broj:newData2})
+
+                    data = newData3.copy()
+                    print(data)
                     #Prijenos podataka u excel
                     
                     # Priprema za stvaranje Excel tablice, sprema podatke i stvara Excel tablicu
