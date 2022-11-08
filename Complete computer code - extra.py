@@ -1,22 +1,23 @@
-#For serial communication + date and time
+#Module za serial communication + datum i vrijeme
 import serial
 import datetime
 import time
 from serial.tools.list_ports import comports
 
-#for excel
+#Za excel
 from openpyxl import Workbook, load_workbook
 from openpyxl.utils import get_column_letter
 from openpyxl.styles import Font
 import json
 
-#Importing things required for sending an e-mail
+#Potrebno za slanje mailova
 import smtplib
 from email.message import EmailMessage
 
 print("Priključite microbit prije nego što započnete")
 izbor = input("Želite li primati obavjesti o povišenim temperaturama? DA ili NE: ")
 
+#Odluka korisnika vezano uz primanje notifikacija
 while izbor != "DA" and izbor != "NE":
     izbor = input("Pogreška u unosu, napišite ili DA ili NE: ")
 
@@ -25,13 +26,15 @@ if izbor == "DA":
     limit = input("Upišite temperaturu u °C iznad koje biste htjeli dobivati notifikacije: ")
 else:
     limit = "100"
+    
 
+#Pocetak programa
 ulaz = input("Napišite START kako biste započeli: ")
 
 while True:
     if ulaz == "START":
 
-        #determining open serial port
+        #Provjerava se je li microbit spojen na usb port i na koji
         for p in comports():
             try:
                 ser = serial.Serial(p.name, 9600, timeout=3)
@@ -42,26 +45,26 @@ while True:
                     quit()
                 continue
         
-        #sending date and time
+        #Racunalo salje bazi vrijeme i datum
         time.sleep(2)
         slanje = (f"{datetime.datetime.now().hour} {datetime.datetime.now().minute} {datetime.datetime.now().second} {datetime.datetime.now().day} {datetime.datetime.now().month} {datetime.datetime.now().year} {limit}")
         ser.write(slanje.encode())
 
-        #waiting for response from microbit
+        #Ceka se odgovor microbita (baze)
         while True:
             data = ser.readline()
             encoding = "utf-8"
             data = str(data, encoding, errors="ignore")
             print(data)
             if data:
-                #Transforming string data into list
+                #Dobiveni string se prebacuje u listu
                 data = data.split("|")
                 
-                #writing out gathered data from microbit
+                #Gatherd data se uklanja iz liste
                 if data[-1] == "Gathered data":
                     data.pop(-1)
                     
-                    #Further data transformation
+                    #Daljnje mijenjanje oblika podataka
                     data2 = []
                     for element in data:
                         element = element.split(",")
@@ -69,20 +72,20 @@ while True:
                 
                     data = data2.copy()
                 
-                    #preparing data in a specific form | data = {id:{date:{time:temp}}}
+                    #priprema za postavljanje podataka na potreban nacin | data = {id:{date:{time:temp}}}
                     newData = {}
                     newData2 = {}
                     lista = []
                     rječnik = {}
                     rješeno = False
                     
-                    #determining the max amount of microbits
+                    #Racunanje maksimalnog broja aktivnih mikrobita 
                     for x in range(len(data)):
                         lista.append(int(data[x][0]))
 
                     n = max(lista)
 
-                    #grouping sublists by microbit id
+                    #Grupiranje pod lista po id microbita
                     for i in range(1, n+1):
                         lista = []
                         for j in data:
@@ -90,7 +93,7 @@ while True:
                                 lista.append(j[1:])
                         newData.update({str(i):lista})
 
-                    #making the final dictionary
+                    #Stvaranje finalnog rjecnika
                     for a,b in newData.items():
                         rječnik = {}
                         zapis = {}
@@ -116,10 +119,10 @@ while True:
                                     continue
                         newData2.update({a:rječnik})
 
-                    #storing the value as "data" in order to avoid confusion
+                    #Ponovno se sprema kao "data" kako ne bi doslo do zabuna
                     data = newData2.copy()
                     
-                    #Transfering the data into excel
+                    #Prijenos podataka u excel
                     wb = Workbook()
                     ws = wb.active
                     ws.title = "Temperature"
@@ -187,7 +190,7 @@ while True:
 
                     wb.save("NovTemp.xlsx")
 
-                #For sending warnings
+                #U slucaju greske salje upozorenje
                 elif len(data) == 3:
                     if data[-2] == "Warning":
                         if izbor == "NE":
@@ -197,14 +200,14 @@ while True:
                             data[0] = data[0].split(",")
                             poruka = (f"High temperature warning - id:{data[0][0]}, date:{data[0][1]}, time:{data[0][2]}, temp:{data[0][3]}")
 
-                            #Setting the message
+                            #Stvaranje e-mail poruke
                             msg = EmailMessage()
                             msg["From"] = "microbit.termostat@outlook.com"
                             msg["To"] = mail
                             msg["Subject"] = "Temperature warning"
                             msg.set_content(poruka)
 
-                            #Sending the message
+                            #Slanje e-mail poruke
                             s = smtplib.SMTP("smtp-mail.outlook.com", port=587)
                             s.starttls()
                             s.login("microbit.termostat@outlook.com", "Microbit314")
@@ -212,6 +215,6 @@ while True:
                             s.quit()
                             
     else:
-        #prevention from typing wrong commands
+        #Prevencija u slucaju da korisnik ne upise pravilno potrebnu rijec ("START")
         while ulaz != "START":
             ulaz = input("Pogreška u unosu, napišite START kako biste započeli")
