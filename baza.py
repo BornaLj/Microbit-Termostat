@@ -1,12 +1,12 @@
-# import modules
+# Potrebni modueli
 from microbit import *
 import radio
-#import log    # debug/comment
 
 data = ""
 uart.init(9600)
 encoding = "utf-8"
 
+#Provjera radi li kod
 display.show(Image.DIAMOND)
 
 while True:
@@ -26,19 +26,19 @@ year = int(Time[5])
 limit = int(Time[6])
 display.clear()
 
-# set radio group and turn radio on
+# Ukljucivanje funkcije radija i namjestanje na radio liniju 1
 radio.config(group=1)
 radio.on()
 
 
 
-# loop repeats forever
+# Zauvijek se ponavlja
 while True:
 
     display.show(Image.HAPPY)
     while True:
             
-        #Extracting the data
+        #Vadjenje podataka
         if button_b.was_pressed():
             data = data + "Gathered data"
             uart.write(data)
@@ -47,7 +47,7 @@ while True:
    
         display.show(Image.CONFUSED)   # display CONFUSED if in send/receive
         sleep(1000)
-        # increase seconds, minutes and hours
+        # Povecavanje varijabli za vrijeme (sluzi za mjerenje vremena)
         second += 1
         if second >= 60:
             minute += 1
@@ -59,7 +59,7 @@ while True:
             day += 1
             hour = 0
             
-        #Changing the month and the year
+        #Mijenjanje mjeseci i godina
         if month == 2:
             if year%4 == 0 and day == 29:
                 month += 1
@@ -78,10 +78,9 @@ while True:
                 month += 1
 
             
-        # send request to sub units
-        print(str(hour),":",str(minute),":",str(second))   # debug/comment
-        if second == 0 and minute%30 == 0:   # production
-        #if second % 11 == 0:   # dev/test
+        # Slanje zahtjeva sporednim microbitima
+        print(str(hour),":",str(minute),":",str(second))   # Provjera rad li kod
+        if second == 0 and minute%30 == 0:   # Zbog ovog se mjeri svakih 30 minuta
             radio.send("+")
             time = str(hour) + ":" + str(minute)
             date = str(day)+"."+str(month)+"."+str(year)+"."
@@ -92,11 +91,11 @@ while True:
                 uart.write(message)
             data = data + str(id) + "," + str(date) + "," + str(time) + "," + str(temp) + "|"
                 
-            display.show("+")   # debug/comment
-            sleep(100)   # debug/comment
-            # print("request sent")   # debug/comment
+            display.show("+")   # Provjera radi li kod
+            sleep(100)   
+         
             
-        # when response is received
+        # Kada je dobiven odgovor (response)
         response = radio.receive()
         if response:
             time = str(hour) + ":" + str(minute)
